@@ -7,19 +7,108 @@
 //
 
 import UIKit
+import AFNetworking
 
-class ViewController: UIViewController {
+let URL_SUFFIX = "(format=m3u8-aapl)"
 
+class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    @IBOutlet var liveCollectionView: UICollectionView!
+    @IBOutlet var videoCollectionView: UICollectionView!
+    
+    @IBOutlet var contentWidthConstraint: NSLayoutConstraint!
+    
+    var videoArray:[AnyObject] = []
+    var liveArray:[AnyObject] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        
+        self.queryVideoData()
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        contentWidthConstraint.constant = view.frame.width * 2
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func queryVideoData() {
+        let manager = AFHTTPSessionManager(sessionConfiguration: NSURLSessionConfiguration.defaultSessionConfiguration())
+        manager.responseSerializer = AFJSONResponseSerializer()
+        
+        let url = NSURL(string: "http://epush.huaweiapi.com/content")
+        let request = NSURLRequest(URL: url!)
+        
+        let task = manager.dataTaskWithRequest(request) { (response, object, error) in
+            
+            if error == nil {
+                let dataArray = (object as! NSArray) as Array
+                
+                for dict in dataArray
+                {
+                    let data = (dict as! NSDictionary) as Dictionary
+                    
+                    let mode = data["mode"] as! String
+                    if mode == "0"
+                    {
+                        self.videoArray.append(data)
+                    }
+                    else if mode == "1"
+                    {
+                        self.liveArray.append(data)
+                    }
+                    
+                }
+            }
+            
+        }
+        task.resume()
+    }
 
+    //MARK: - UICollectionViewDataSource
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if collectionView == liveCollectionView
+        {
+            return liveArray.count
+        }
+        else if collectionView == videoCollectionView
+        {
+            return videoArray.count
+        }
+        
+        return 0
+    }
+    
+    // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        
+        if collectionView == liveCollectionView
+        {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellID1", forIndexPath: indexPath) as! AzureCollectionViewCell
+            
+//            let data = (liveArray[indexPath.row] as! NSDictionary) as! Dictionary
+            
+            
+            
+            return cell
+        }
+        else if collectionView == videoCollectionView
+        {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellID2", forIndexPath: indexPath) as! AzureCollectionViewCell
+            
+            return cell
+        }
+        
+        return UICollectionViewCell()
+    }
 
 }
 

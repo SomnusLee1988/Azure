@@ -12,16 +12,45 @@ class AzureCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet var imageView: UIImageView!
     
+    @IBOutlet var coverView: UIView!
+    
     @IBOutlet var titleLabel: UILabel!
     
     @IBOutlet var descriptionLabel: UILabel!
     
     @IBOutlet var imageHeightConstraint: NSLayoutConstraint!
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        initializeSubviews()
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        initializeSubviews()
+    }
+    
+    func initializeSubviews() {
+        let view:UIView = NSBundle.mainBundle().loadNibNamed("AzureCollectionViewCell", owner: self, options: nil)[0] as! UIView
+        self.addSubview(view)
+        view.frame = self.bounds
+        
+        self.imageView.layer.cornerRadius = 3.0
+        self.imageView.layer.masksToBounds = true
+        self.coverView.layer.cornerRadius = 3.0
+        self.coverView.layer.masksToBounds = true
+        
+//        self.titleLabel.text = ""
+//        self.descriptionLabel.text = ""
+    }
+    
     override func updateConstraints() {
         super.updateConstraints()
         
-//        NSLayoutConstraint(item: imageView, attribute: .Height, relatedBy: .Equal, toItem: imageView, attribute: .Width, multiplier: 0.75, constant: 1.0).active = true
         imageHeightConstraint.constant = imageView.frame.width * 0.75
     }
 }

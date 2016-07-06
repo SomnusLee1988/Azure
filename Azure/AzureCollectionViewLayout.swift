@@ -66,7 +66,13 @@ class AzureCollectionViewLayout: UICollectionViewLayout {
     
     override func collectionViewContentSize() -> CGSize {
         let columnHeight = contentWidth / CGFloat(numberOfColumns)
-        let contentHeight = CGFloat(collectionView!.numberOfItemsInSection(0) / numberOfColumns) * columnHeight
+        
+        let numberOfItems = Float(collectionView!.numberOfItemsInSection(0))
+        let number = NSDecimalNumber(float: numberOfItems / Float(numberOfColumns))
+        let handler = NSDecimalNumberHandler(roundingMode: .RoundUp, scale: 0, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
+        let numberOfRows = number.decimalNumberByRoundingAccordingToBehavior(handler).intValue
+        let contentHeight = CGFloat(numberOfRows) * columnHeight
+        
         return CGSize(width: contentWidth, height: contentHeight)
     }
     

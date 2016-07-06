@@ -17,15 +17,25 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     @IBOutlet var liveCollectionView: UICollectionView!
     @IBOutlet var videoCollectionView: UICollectionView!
     
+    @IBOutlet var liveButton: UIButton!
+    @IBOutlet var videoButton: UIButton!
     @IBOutlet var contentWidthConstraint: NSLayoutConstraint!
     
     var videoArray:[AnyObject] = []
     var liveArray:[AnyObject] = []
     
+    var selectedSegmentIndex = -1
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        self.liveButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        self.liveButton.setTitleColor(UIColor.RGB(47, 160, 251), forState: .Selected)
+        self.videoButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        self.videoButton.setTitleColor(UIColor.RGB(47, 160, 251), forState: .Selected)
         
+        self.addObserver(self, forKeyPath: "selectedSegmentIndex", options: .New, context: nil)
+        selectedSegmentIndex = 0
         
         self.queryVideoData()
         
@@ -105,15 +115,17 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             let data = liveArray[indexPath.row]
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-                let imageUrl = data["poster"] as! String
-                
-                let imageData = NSData(contentsOfURL: NSURL(string: imageUrl)!)
-                if imageData != nil {
-                    
-                    dispatch_async(dispatch_get_main_queue(), { 
-                        cell.imageView.image = UIImage(data: imageData!)
-                    })
+                if let imageUrl = data["poster"] as? String
+                {
+                    if let imageData = NSData(contentsOfURL: NSURL(string: imageUrl)!)
+                    {
+                        
+                        dispatch_async(dispatch_get_main_queue(), {
+                            cell.imageView.image = UIImage(data: imageData)
+                        })
+                    }
                 }
+                
             })
             
             cell.titleLabel.text = data["name"] as? String
@@ -124,27 +136,33 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         else if collectionView == videoCollectionView
         {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellID2", forIndexPath: indexPath) as! AzureCollectionViewCell
-//
-//            let data:[NSObject:AnyObject] = videoArray[indexPath.row]
-//            
-//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-//                let imageUrl = data["poster"] as! String
-//                let imageData = NSData(contentsOfURL: NSURL(string: imageUrl)!)
-//                if imageData != nil {
-//                    cell.imageView.image = UIImage(data: imageData!)
-//                }
-//            })
-//            
-//            let name = data["name"] as? String
-//            if name != nil {
-//                cell.titleLabel.text = name
-//            }
-//            
-//            let desc = data["desc"] as? String
-//            if desc != nil {
-//                cell.descriptionLabel.text = desc
-//            }
-//            
+
+            let data = videoArray[indexPath.row]
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+                if let imageUrl = data["poster"] as? String
+                {
+                    if let imageData = NSData(contentsOfURL: NSURL(string: imageUrl)!)
+                    {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            cell.imageView.image = UIImage(data: imageData)
+                        })
+                        
+                    }
+                }
+                
+            })
+            
+            
+            if let name = data["name"] as? String {
+                cell.titleLabel.text = name
+            }
+            
+            
+            if let desc = data["desc"] as? String {
+                cell.descriptionLabel.text = desc
+            }
+            
             return cell
         }
         

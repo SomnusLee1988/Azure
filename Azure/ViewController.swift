@@ -8,6 +8,7 @@
 
 import UIKit
 import AFNetworking
+import MBProgressHUD
 
 let URL_SUFFIX = "(format=m3u8-aapl)"
 
@@ -41,6 +42,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     }
     
     func queryVideoData() {
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         let manager = AFHTTPSessionManager(sessionConfiguration: NSURLSessionConfiguration.defaultSessionConfiguration())
         manager.responseSerializer.acceptableContentTypes = ["application/json"];
         
@@ -67,7 +69,8 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
                     
                 }
                 
-                dispatch_async(dispatch_get_main_queue(), { 
+                dispatch_async(dispatch_get_main_queue(), {
+                    MBProgressHUD.hideHUDForView(self.view, animated: true)
                     self.liveCollectionView.reloadData()
                     self.videoCollectionView.reloadData()
                 })

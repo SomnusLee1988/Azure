@@ -26,6 +26,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eJW-CF-EY5">
                                                 <rect key="frame" x="135" y="10" width="30" height="30"/>
                                                 <state key="normal" title="视频"/>
+                                                <connections>
+                                                    <action selector="videoButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lgF-hI-31t"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -40,6 +43,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="57W-jF-l5P">
                                                 <rect key="frame" x="135" y="10" width="30" height="30"/>
                                                 <state key="normal" title="直播"/>
+                                                <connections>
+                                                    <action selector="liveButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bLY-5R-sdU"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -81,11 +87,11 @@
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
-                                        <exclude reference="ruU-nQ-l2a"/>
                                         <exclude reference="U48-KZ-GVa"/>
                                         <exclude reference="Y3u-GM-s7e"/>
                                         <exclude reference="sNJ-Yx-Hcx"/>
                                         <exclude reference="vYR-bi-dNj"/>
+                                        <exclude reference="ruU-nQ-l2a"/>
                                         <exclude reference="Fk5-n9-rA8"/>
                                         <exclude reference="zep-Jo-8Pf"/>
                                     </mask>
@@ -168,6 +174,9 @@
                                     <constraint firstItem="B46-T4-tPK" firstAttribute="centerY" secondItem="77v-ba-uqi" secondAttribute="centerY" id="em8-s3-6XX"/>
                                     <constraint firstItem="B46-T4-tPK" firstAttribute="top" secondItem="77v-ba-uqi" secondAttribute="top" id="z1O-AB-hwK"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="VzW-pM-D0i"/>
+                                </connections>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" red="0.85098039215686272" green="0.85098039215686272" blue="0.85098039215686272" alpha="1" colorSpace="calibratedRGB"/>
@@ -186,6 +195,8 @@
                         <outlet property="contentWidthConstraint" destination="SwN-tc-LrP" id="Ll8-wh-Cn9"/>
                         <outlet property="liveButton" destination="57W-jF-l5P" id="eh8-3T-TNS"/>
                         <outlet property="liveCollectionView" destination="VNG-a4-2a4" id="cf0-B6-qd3"/>
+                        <outlet property="scrollView" destination="77v-ba-uqi" id="hBP-X4-5ea"/>
+                        <outlet property="segmentBar" destination="fUG-1s-NuQ" id="2vd-Ij-Y5H"/>
                         <outlet property="videoButton" destination="eJW-CF-EY5" id="BhQ-r9-w5H"/>
                         <outlet property="videoCollectionView" destination="Ea9-w7-Rvy" id="GvL-Ip-dC9"/>
                     </connections>

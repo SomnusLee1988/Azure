@@ -16,11 +16,13 @@ import Alamofire
 let URL_SUFFIX = "(format=m3u8-aapl)"
 private var azureContext = 0
 
-class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate {
     
+    @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var liveCollectionView: UICollectionView!
     @IBOutlet var videoCollectionView: UICollectionView!
     
+    @IBOutlet var segmentBar: UIView!
     @IBOutlet var liveButton: UIButton!
     @IBOutlet var videoButton: UIButton!
     @IBOutlet var contentWidthConstraint: NSLayoutConstraint!
@@ -37,10 +39,6 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        self.liveButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        self.liveButton.setTitleColor(UIColor.RGB(47, 160, 251), forState: .Selected)
-        self.videoButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        self.videoButton.setTitleColor(UIColor.RGB(47, 160, 251), forState: .Selected)
         
         self.addObserver(self, forKeyPath: "selectedSegmentIndex", options: .New, context: &azureContext)
         selectedSegmentIndex = 0
@@ -200,14 +198,54 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         return UICollectionViewCell()
     }
     
+    // MARK: - UIScrollViewDelegate
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let offsetRatio = scrollView.contentOffset.x / self.view.frame.width
+        var frame = self.segmentBar.frame
+        frame.origin.x = self.view.frame.width / 4.0 - segmentBar.frame.width / 2.0 + offsetRatio * (self.view.frame.width / 2.0)
+        segmentBar.frame = frame
+    }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        if scrollView.contentOffset.x == 0 {
+            selectedSegmentIndex = 0
+        }
+        else if scrollView.contentOffset.x == self.view.frame.width {
+            selectedSegmentIndex = 1
+        }
+    }
+    
+    // MARK: -
     func segmentIndexChanged() {
         if selectedSegmentIndex == 0 {
+            UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut, animations: { 
+                var frame = self.segmentBar.frame
+                frame.origin.x = self.view.frame.width / 4.0 - frame.width / 2.0
+                self.segmentBar.frame = frame
+                }, completion: { (finished) in
+                    self.liveButton.setTitleColor(UIColor.RGB(47, 160, 251), forState: .Normal)
+                    self.videoButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+            })
             
         }
         else if selectedSegmentIndex == 1 {
-            
+            UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut, animations: {
+                var frame = self.segmentBar.frame
+                frame.origin.x = self.view.frame.width * 3.0 / 4.0 - frame.width / 2.0
+                self.segmentBar.frame = frame
+                }, completion: { (finished) in
+                    self.liveButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+                    self.videoButton.setTitleColor(UIColor.RGB(47, 160, 251), forState: .Normal)
+            })
         }
     }
 
+    @IBAction func liveButtonClicked(sender: AnyObject) {
+        selectedSegmentIndex = 0
+    }
+    
+    @IBAction func videoButtonClicked(sender: AnyObject) {
+        selectedSegmentIndex = 1
+    }
 }
 

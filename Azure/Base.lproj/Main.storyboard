@@ -90,7 +90,7 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="77v-ba-uqi">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="77v-ba-uqi">
                                 <rect key="frame" x="0.0" y="115" width="600" height="485"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B46-T4-tPK">
@@ -110,6 +110,9 @@
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PXQ-AG-mtc">
                                                                     <rect key="frame" x="8" y="8" width="184" height="148"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="148" id="DVc-55-M8u"/>
+                                                                    </constraints>
                                                                 </imageView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5kk-fJ-gUq">
                                                                     <rect key="frame" x="8" y="176" width="33" height="16"/>
@@ -145,6 +148,8 @@
                                                         <variation key="default">
                                                             <mask key="constraints">
                                                                 <exclude reference="Z5e-Fq-qg6"/>
+                                                                <exclude reference="b6k-QX-1X0"/>
+                                                                <exclude reference="q4i-3E-mRv"/>
                                                                 <exclude reference="vph-kn-eCt"/>
                                                                 <exclude reference="f9Z-gc-fcJ"/>
                                                                 <exclude reference="hdS-vA-zZt"/>
@@ -152,6 +157,7 @@
                                                         </variation>
                                                         <connections>
                                                             <outlet property="descriptionLabel" destination="5kk-fJ-gUq" id="6eV-Cj-jB5"/>
+                                                            <outlet property="imageHeightConstraint" destination="DVc-55-M8u" id="u1E-wr-hUd"/>
                                                             <outlet property="imageView" destination="PXQ-AG-mtc" id="fQ0-Wj-5zV"/>
                                                             <outlet property="titleLabel" destination="adU-Sz-W0P" id="38Q-Fo-1wD"/>
                                                         </connections>
@@ -168,14 +174,14 @@
                                                 <collectionViewLayout key="collectionViewLayout" id="7lS-zN-Gng" customClass="AzureCollectionViewLayout" customModule="Azure" customModuleProvider="target"/>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CellID2" id="NcV-Px-YLZ" customClass="AzureCollectionViewCell" customModule="Azure" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
+                                                        <rect key="frame" x="55" y="0.0" width="191" height="199"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                            <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="191" height="199"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         </view>
-                                                        <size key="customSize" width="120" height="120"/>
+                                                        <size key="customSize" width="191" height="199"/>
                                                     </collectionViewCell>
                                                 </cells>
                                                 <connections>

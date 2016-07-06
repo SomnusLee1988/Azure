@@ -42,7 +42,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     
     func queryVideoData() {
         let manager = AFHTTPSessionManager(sessionConfiguration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        manager.responseSerializer = AFJSONResponseSerializer()
+        manager.responseSerializer.acceptableContentTypes = ["application/json"];
         
         let url = NSURL(string: "http://epush.huaweiapi.com/content")
         let request = NSURLRequest(URL: url!)
@@ -50,23 +50,28 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         let task = manager.dataTaskWithRequest(request) { (response, object, error) in
             
             if error == nil {
-                let dataArray = (object as! NSArray) as Array
                 
+                let dataArray = (object as! NSArray) as Array
+                                
                 for dict in dataArray
                 {
-                    let data = (dict as! NSDictionary) as Dictionary
-                    
-                    let mode = data["mode"] as! String
+                    let mode = dict["mode"] as! String
                     if mode == "0"
                     {
-                        self.videoArray.append(data)
+                        self.videoArray.append(dict)
                     }
                     else if mode == "1"
                     {
-                        self.liveArray.append(data)
+                        self.liveArray.append(dict)
                     }
                     
                 }
+                
+                dispatch_async(dispatch_get_main_queue(), { 
+                    self.liveCollectionView.reloadData()
+                    self.videoCollectionView.reloadData()
+                })
+                
             }
             
         }
@@ -94,16 +99,49 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellID1", forIndexPath: indexPath) as! AzureCollectionViewCell
             
-//            let data = (liveArray[indexPath.row] as! NSDictionary) as! Dictionary
+            let data = liveArray[indexPath.row]
             
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+                let imageUrl = data["poster"] as! String
+                
+                let imageData = NSData(contentsOfURL: NSURL(string: imageUrl)!)
+                if imageData != nil {
+                    
+                    dispatch_async(dispatch_get_main_queue(), { 
+                        cell.imageView.image = UIImage(data: imageData!)
+                    })
+                }
+            })
             
+            cell.titleLabel.text = data["name"] as? String
+            cell.descriptionLabel.text = data["desc"] as? String
             
             return cell
         }
         else if collectionView == videoCollectionView
         {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellID2", forIndexPath: indexPath) as! AzureCollectionViewCell
-            
+//
+//            let data:[NSObject:AnyObject] = videoArray[indexPath.row]
+//            
+//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+//                let imageUrl = data["poster"] as! String
+//                let imageData = NSData(contentsOfURL: NSURL(string: imageUrl)!)
+//                if imageData != nil {
+//                    cell.imageView.image = UIImage(data: imageData!)
+//                }
+//            })
+//            
+//            let name = data["name"] as? String
+//            if name != nil {
+//                cell.titleLabel.text = name
+//            }
+//            
+//            let desc = data["desc"] as? String
+//            if desc != nil {
+//                cell.descriptionLabel.text = desc
+//            }
+//            
             return cell
         }
         

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		450EC8E61D2D37DE0097F640 /* AzureCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 450EC8E51D2D37DE0097F640 /* AzureCollectionViewCell.xib */; };
 		450EC8E81D2D4AE00097F640 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450EC8E71D2D4AE00097F640 /* UIColorExtension.swift */; };
+		450EC8EA1D2D67D20097F640 /* SLButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450EC8E91D2D67D20097F640 /* SLButton.swift */; };
 		4546F57C1D2AE09100C5BFB2 /* AzureCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4546F57B1D2AE09100C5BFB2 /* AzureCollectionViewLayout.swift */; };
 		4546F57E1D2AE0EF00C5BFB2 /* AzureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4546F57D1D2AE0EF00C5BFB2 /* AzureCollectionViewCell.swift */; };
 		45993F211D2ACE6000040A4D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45993F201D2ACE6000040A4D /* AppDelegate.swift */; };
@@ -23,6 +24,7 @@
 		1FD45AAFC095DAF187C56329 /* Pods-Azure.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Azure.release.xcconfig"; path = "Pods/Target Support Files/Pods-Azure/Pods-Azure.release.xcconfig"; sourceTree = "<group>"; };
 		450EC8E51D2D37DE0097F640 /* AzureCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AzureCollectionViewCell.xib; sourceTree = "<group>"; };
 		450EC8E71D2D4AE00097F640 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		450EC8E91D2D67D20097F640 /* SLButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLButton.swift; sourceTree = "<group>"; };
 		4546F57B1D2AE09100C5BFB2 /* AzureCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AzureCollectionViewLayout.swift; sourceTree = "<group>"; };
 		4546F57D1D2AE0EF00C5BFB2 /* AzureCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AzureCollectionViewCell.swift; sourceTree = "<group>"; };
 		45993F1D1D2ACE6000040A4D /* Azure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Azure.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +81,7 @@
 				4546F57B1D2AE09100C5BFB2 /* AzureCollectionViewLayout.swift */,
 				4546F57D1D2AE0EF00C5BFB2 /* AzureCollectionViewCell.swift */,
 				450EC8E51D2D37DE0097F640 /* AzureCollectionViewCell.xib */,
+				450EC8E91D2D67D20097F640 /* SLButton.swift */,
 			);
 			path = Azure;
 			sourceTree = "<group>";
@@ -227,6 +230,7 @@
 				4546F57C1D2AE09100C5BFB2 /* AzureCollectionViewLayout.swift in Sources */,
 				450EC8E81D2D4AE00097F640 /* UIColorExtension.swift in Sources */,
 				4546F57E1D2AE0EF00C5BFB2 /* AzureCollectionViewCell.swift in Sources */,
+				450EC8EA1D2D67D20097F640 /* SLButton.swift in Sources */,
 				45993F211D2ACE6000040A4D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,8 +9,11 @@
 import UIKit
 import AFNetworking
 import MBProgressHUD
+import AVFoundation
+import AVKit
 
 let URL_SUFFIX = "(format=m3u8-aapl)"
+private var azureContext = 0
 
 class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
@@ -24,7 +27,11 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     var videoArray:[AnyObject] = []
     var liveArray:[AnyObject] = []
     
-    var selectedSegmentIndex = -1
+    var selectedSegmentIndex = -1 {
+        didSet {
+            self.segmentIndexChanged()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +41,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         self.videoButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
         self.videoButton.setTitleColor(UIColor.RGB(47, 160, 251), forState: .Selected)
         
-        self.addObserver(self, forKeyPath: "selectedSegmentIndex", options: .New, context: nil)
+        self.addObserver(self, forKeyPath: "selectedSegmentIndex", options: .New, context: &azureContext)
         selectedSegmentIndex = 0
         
         self.queryVideoData()
@@ -128,8 +135,27 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
                 
             })
             
-            cell.titleLabel.text = data["name"] as? String
-            cell.descriptionLabel.text = data["desc"] as? String
+            if let name = data["name"] as? String {
+                cell.titleLabel.text = name
+            }
+            
+            
+            if let desc = data["desc"] as? String {
+                cell.descriptionLabel.text = desc
+            }
+            
+            if let hlsUrl = data["hlsUrl"] as? String {
+                cell.playButton.addHandler({
+                    let videoURL = NSURL(string: hlsUrl)
+                    let player = AVPlayer(URL: videoURL!)
+                    let playerViewController = AVPlayerViewController()
+                    playerViewController.player = player
+                    self.presentViewController(playerViewController, animated: true) {
+                        playerViewController.player!.play()
+                    }
+                })
+            }
+            
             
             return cell
         }
@@ -163,10 +189,31 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
                 cell.descriptionLabel.text = desc
             }
             
+            if let hlsUrl = data["hlsUrl"] as? String {
+                cell.playButton.addHandler({
+                    let videoURL = NSURL(string: hlsUrl)
+                    let player = AVPlayer(URL: videoURL!)
+                    let playerViewController = AVPlayerViewController()
+                    playerViewController.player = player
+                    self.presentViewController(playerViewController, animated: true) {
+                        playerViewController.player!.play()
+                    }
+                })
+            }
+            
             return cell
         }
         
         return UICollectionViewCell()
+    }
+    
+    func segmentIndexChanged() {
+        if selectedSegmentIndex == 0 {
+            
+        }
+        else if selectedSegmentIndex == 1 {
+            
+        }
     }
 
 }

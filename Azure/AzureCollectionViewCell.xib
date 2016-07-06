@@ -12,6 +12,7 @@
                 <outlet property="descriptionLabel" destination="i3x-nc-3xa" id="xXJ-6s-baX"/>
                 <outlet property="imageHeightConstraint" destination="UgC-Db-fbP" id="jos-IC-R1S"/>
                 <outlet property="imageView" destination="Nrt-39-mer" id="meV-gN-Ydx"/>
+                <outlet property="playButton" destination="Mm9-MK-nZb" id="2Gq-zV-l3f"/>
                 <outlet property="titleLabel" destination="nNj-42-uo8" id="aCV-jj-FsW"/>
             </connections>
         </placeholder>
@@ -40,7 +41,30 @@
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SaD-CR-kXv">
                     <rect key="frame" x="8" y="8" width="184" height="130"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mm9-MK-nZb" customClass="SLButton" customModule="Azure" customModuleProvider="target">
+                            <rect key="frame" x="8" y="8" width="168" height="114"/>
+                            <state key="normal" image="PlayButton"/>
+                            <connections>
+                                <action selector="playButtonCliced:" destination="-1" eventType="touchUpInside" id="aqb-Wi-zsS"/>
+                            </connections>
+                        </button>
+                    </subviews>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="Mm9-MK-nZb" firstAttribute="centerY" secondItem="SaD-CR-kXv" secondAttribute="centerY" id="2W4-P1-vPn"/>
+                        <constraint firstAttribute="bottomMargin" secondItem="Mm9-MK-nZb" secondAttribute="bottom" id="gqU-WQ-Zyj"/>
+                        <constraint firstItem="Mm9-MK-nZb" firstAttribute="top" secondItem="SaD-CR-kXv" secondAttribute="topMargin" id="ha6-Fn-DOl"/>
+                        <constraint firstItem="Mm9-MK-nZb" firstAttribute="leading" secondItem="SaD-CR-kXv" secondAttribute="leadingMargin" id="o29-Yy-iNf"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="Mm9-MK-nZb" secondAttribute="trailing" id="rxC-la-FOK"/>
+                        <constraint firstItem="Mm9-MK-nZb" firstAttribute="centerX" secondItem="SaD-CR-kXv" secondAttribute="centerX" id="s7P-zB-oem"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="2W4-P1-vPn"/>
+                            <exclude reference="s7P-zB-oem"/>
+                        </mask>
+                    </variation>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -71,4 +95,7 @@
             <point key="canvasLocation" x="315.5" y="203.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="PlayButton" width="44" height="44"/>
+    </resources>
 </document>

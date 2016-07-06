@@ -18,6 +18,8 @@ class AzureCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet var descriptionLabel: UILabel!
     
+    @IBOutlet var playButton: SLButton!
+    
     @IBOutlet var imageHeightConstraint: NSLayoutConstraint!
     
     required init?(coder aDecoder: NSCoder) {
@@ -44,13 +46,20 @@ class AzureCollectionViewCell: UICollectionViewCell {
         self.coverView.layer.cornerRadius = 3.0
         self.coverView.layer.masksToBounds = true
         
-//        self.titleLabel.text = ""
-//        self.descriptionLabel.text = ""
+        self.titleLabel.text = ""
+        self.descriptionLabel.text = ""
     }
     
     override func updateConstraints() {
         super.updateConstraints()
         
         imageHeightConstraint.constant = imageView.frame.width * 0.75
+    }
+    
+    @IBAction func playButtonCliced(sender: AnyObject) {
+        
+        let button = sender as! SLButton
+        
+        button.handler()
     }
 }

@@ -11,6 +11,7 @@ import AFNetworking
 import MBProgressHUD
 import AVFoundation
 import AVKit
+import Alamofire
 
 let URL_SUFFIX = "(format=m3u8-aapl)"
 private var azureContext = 0
@@ -60,42 +61,34 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     
     func queryVideoData() {
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        let manager = AFHTTPSessionManager(sessionConfiguration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        manager.responseSerializer.acceptableContentTypes = ["application/json"];
-        
-        let url = NSURL(string: "http://epush.huaweiapi.com/content")
-        let request = NSURLRequest(URL: url!)
-        
-        let task = manager.dataTaskWithRequest(request) { (response, object, error) in
-            
-            if error == nil {
-                
-                let dataArray = (object as! NSArray) as Array
-                                
-                for dict in dataArray
-                {
-                    let mode = dict["mode"] as! String
-                    if mode == "0"
-                    {
-                        self.videoArray.append(dict)
-                    }
-                    else if mode == "1"
-                    {
-                        self.liveArray.append(dict)
-                    }
-                    
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), {
-                    MBProgressHUD.hideHUDForView(self.view, animated: true)
-                    self.liveCollectionView.reloadData()
-                    self.videoCollectionView.reloadData()
-                })
-                
+        Alamofire.request(.GET, "http://epush.huaweiapi.com/content").validate().responseJSON { (response) in
+            guard response.result.isSuccess else {
+                print("Error while fetching remote videos: \(response.result.error)")
+                return
             }
             
+            guard let value = response.result.value as? [AnyObject] else {
+                print("Malformed data received from queryVideoData service")
+                return
+            }
+            
+            for dict in value {
+                if let mode = dict["mode"] as? String where mode == "0" {
+                    self.videoArray.append(dict)
+                }
+                else if let mode = dict["mode"] as? String where mode == "1" {
+                    self.liveArray.append(dict)
+                }
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), { 
+                MBProgressHUD.hideHUDForView(self.view, animated: true)
+                self.liveCollectionView.reloadData()
+                self.videoCollectionView.reloadData()
+            })
         }
-        task.resume()
+        
+        
     }
 
     //MARK: - UICollectionViewDataSource

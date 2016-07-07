@@ -5,4 +5,5 @@ pod 'AFNetworking', '~> 3.0'
 pod 'CocoaLumberjack/Swift', '~> 2.3.0'
 pod 'MBProgressHUD', '~> 0.9.2'
 pod 'Alamofire', '~> 3.4'
+pod 'MJRefresh'
 end

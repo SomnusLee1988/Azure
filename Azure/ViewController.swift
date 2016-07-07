@@ -12,6 +12,7 @@ import MBProgressHUD
 import AVFoundation
 import AVKit
 import Alamofire
+import MJRefresh
 
 let URL_SUFFIX = "(format=m3u8-aapl)"
 private var azureContext = 0
@@ -43,6 +44,14 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         self.addObserver(self, forKeyPath: "selectedSegmentIndex", options: .New, context: &azureContext)
         selectedSegmentIndex = 0
         
+        self.liveCollectionView.mj_header = MJRefreshNormalHeader(refreshingBlock: { 
+            self.queryVideoData()
+        })
+        
+        self.videoCollectionView.mj_header = MJRefreshNormalHeader(refreshingBlock: {
+            self.queryVideoData()
+        })
+        
         self.queryVideoData()
         
     }
@@ -59,6 +68,8 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     
     func queryVideoData() {
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        videoArray.removeAll()
+        liveArray.removeAll()
         Alamofire.request(.GET, "http://epush.huaweiapi.com/content").validate().responseJSON { (response) in
             guard response.result.isSuccess else {
                 print("Error while fetching remote videos: \(response.result.error)")
@@ -81,6 +92,8 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             
             dispatch_async(dispatch_get_main_queue(), { 
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
+                self.liveCollectionView.mj_header.endRefreshing()
+                self.videoCollectionView.mj_header.endRefreshing()
                 self.liveCollectionView.reloadData()
                 self.videoCollectionView.reloadData()
             })
@@ -182,7 +195,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             
             if let hlsUrl = data["hlsUrl"] as? String {
                 cell.playButton.addHandler({
-                    let videoURL = NSURL(string: hlsUrl)
+                    let videoURL = NSURL(string: hlsUrl.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!)
                     let player = AVPlayer(URL: videoURL!)
                     let playerViewController = AVPlayerViewController()
                     playerViewController.player = player
@@ -190,6 +203,10 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
                         playerViewController.player!.play()
                     }
                 })
+            }
+            else {
+            
+                
             }
             
             return cell
@@ -218,34 +235,26 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     // MARK: -
     func segmentIndexChanged() {
         if selectedSegmentIndex == 0 {
-            UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut, animations: { 
-                var frame = self.segmentBar.frame
-                frame.origin.x = self.view.frame.width / 4.0 - frame.width / 2.0
-                self.segmentBar.frame = frame
-                }, completion: { (finished) in
-                    self.liveButton.setTitleColor(UIColor.RGB(47, 160, 251), forState: .Normal)
-                    self.videoButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-            })
+            
+            self.liveButton.setTitleColor(UIColor.RGB(47, 160, 251), forState: .Normal)
+            self.videoButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
             
         }
         else if selectedSegmentIndex == 1 {
-            UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut, animations: {
-                var frame = self.segmentBar.frame
-                frame.origin.x = self.view.frame.width * 3.0 / 4.0 - frame.width / 2.0
-                self.segmentBar.frame = frame
-                }, completion: { (finished) in
-                    self.liveButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-                    self.videoButton.setTitleColor(UIColor.RGB(47, 160, 251), forState: .Normal)
-            })
+            
+            self.liveButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+            self.videoButton.setTitleColor(UIColor.RGB(47, 160, 251), forState: .Normal)
         }
     }
 
     @IBAction func liveButtonClicked(sender: AnyObject) {
         selectedSegmentIndex = 0
+        self.scrollView.scrollRectToVisible(self.liveCollectionView.frame, animated: true)
     }
     
     @IBAction func videoButtonClicked(sender: AnyObject) {
         selectedSegmentIndex = 1
+        self.scrollView.scrollRectToVisible(self.videoCollectionView.frame, animated: true)
     }
 }
 

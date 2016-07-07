@@ -1,0 +1,6 @@
+framework module SLAlertController {
+  umbrella header "SLAlertController-umbrella.h"
+
+  export *
+  module * { export * }
+}

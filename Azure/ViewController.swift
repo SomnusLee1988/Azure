@@ -13,6 +13,7 @@ import AVFoundation
 import AVKit
 import Alamofire
 import MJRefresh
+import SLAlertController
 
 let URL_SUFFIX = "(format=m3u8-aapl)"
 private var azureContext = 0
@@ -150,7 +151,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             
             if let hlsUrl = data["hlsUrl"] as? String {
                 cell.playButton.addHandler({
-                    let videoURL = NSURL(string: hlsUrl)
+                    let videoURL = NSURL(string: hlsUrl.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!)
                     let player = AVPlayer(URL: videoURL!)
                     let playerViewController = AVPlayerViewController()
                     playerViewController.player = player
@@ -158,6 +159,9 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
                         playerViewController.player!.play()
                     }
                 })
+            }
+            else {
+                
             }
             
             
@@ -206,6 +210,11 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             }
             else {
             
+                cell.playButton.addHandler({
+                    let alert = SLAlertController(title: "Something wrong may happen with this video", message: nil, image: nil, cancelButtonTitle: "OK", otherButtonTitle: nil, delay: nil, withAnimation: SLAlertAnimation.Fade)
+                    alert.alertTintColor = UIColor.RGB(255, 58, 47)
+                    alert.show(self, animated: true, completion: nil)
+                })
                 
             }
             

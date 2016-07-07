@@ -65,37 +65,19 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="fUG-1s-NuQ" firstAttribute="centerX" secondItem="8hK-c9-E4y" secondAttribute="centerX" id="F7n-dT-Ihd"/>
-                                    <constraint firstItem="eJW-CF-EY5" firstAttribute="centerX" secondItem="fUG-1s-NuQ" secondAttribute="centerX" id="Fk5-n9-rA8"/>
                                     <constraint firstAttribute="bottom" secondItem="fUG-1s-NuQ" secondAttribute="bottom" id="KET-dL-9z9"/>
                                     <constraint firstItem="8hK-c9-E4y" firstAttribute="top" secondItem="0NR-WG-QVe" secondAttribute="top" id="KZC-8L-H6L"/>
                                     <constraint firstItem="QOG-sb-jIZ" firstAttribute="leading" secondItem="8hK-c9-E4y" secondAttribute="trailing" id="L6m-OB-pj1"/>
                                     <constraint firstItem="QOG-sb-jIZ" firstAttribute="top" secondItem="0NR-WG-QVe" secondAttribute="top" id="MoB-uA-17Q"/>
-                                    <constraint firstItem="fUG-1s-NuQ" firstAttribute="top" secondItem="QOG-sb-jIZ" secondAttribute="bottom" id="U48-KZ-GVa"/>
                                     <constraint firstAttribute="bottom" secondItem="QOG-sb-jIZ" secondAttribute="bottom" id="UOr-mm-o6V"/>
-                                    <constraint firstItem="fUG-1s-NuQ" firstAttribute="centerX" secondItem="QOG-sb-jIZ" secondAttribute="centerX" id="Y3u-GM-s7e"/>
                                     <constraint firstItem="QOG-sb-jIZ" firstAttribute="leading" secondItem="8hK-c9-E4y" secondAttribute="trailing" id="ZmP-D9-yI0"/>
                                     <constraint firstAttribute="bottom" secondItem="8hK-c9-E4y" secondAttribute="bottom" id="dM2-UT-WR7"/>
                                     <constraint firstAttribute="trailing" secondItem="QOG-sb-jIZ" secondAttribute="trailing" id="ds3-Fa-C2H"/>
                                     <constraint firstAttribute="height" constant="50" id="inn-bn-NHf"/>
                                     <constraint firstItem="QOG-sb-jIZ" firstAttribute="width" secondItem="8hK-c9-E4y" secondAttribute="width" id="l9C-Jw-ALu"/>
-                                    <constraint firstAttribute="trailing" secondItem="QOG-sb-jIZ" secondAttribute="trailing" id="ruU-nQ-l2a"/>
-                                    <constraint firstAttribute="bottom" secondItem="fUG-1s-NuQ" secondAttribute="bottom" id="sNJ-Yx-Hcx"/>
-                                    <constraint firstItem="fUG-1s-NuQ" firstAttribute="top" secondItem="0NR-WG-QVe" secondAttribute="top" constant="40" id="vYR-bi-dNj"/>
+                                    <constraint firstItem="fUG-1s-NuQ" firstAttribute="leading" secondItem="0NR-WG-QVe" secondAttribute="leading" constant="125" id="pDR-VK-COc"/>
                                     <constraint firstItem="8hK-c9-E4y" firstAttribute="leading" secondItem="0NR-WG-QVe" secondAttribute="leading" id="wXm-CJ-rXT"/>
-                                    <constraint firstItem="eJW-CF-EY5" firstAttribute="width" secondItem="fUG-1s-NuQ" secondAttribute="width" id="zep-Jo-8Pf"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="U48-KZ-GVa"/>
-                                        <exclude reference="Y3u-GM-s7e"/>
-                                        <exclude reference="sNJ-Yx-Hcx"/>
-                                        <exclude reference="vYR-bi-dNj"/>
-                                        <exclude reference="ruU-nQ-l2a"/>
-                                        <exclude reference="Fk5-n9-rA8"/>
-                                        <exclude reference="zep-Jo-8Pf"/>
-                                    </mask>
-                                </variation>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="77v-ba-uqi">
                                 <rect key="frame" x="0.0" y="115" width="600" height="485"/>
@@ -193,10 +175,13 @@
                     <navigationItem key="navigationItem" title="TV" id="T1c-is-B9r"/>
                     <connections>
                         <outlet property="contentWidthConstraint" destination="SwN-tc-LrP" id="Ll8-wh-Cn9"/>
+                        <outlet property="liveBtnBackgroundView" destination="8hK-c9-E4y" id="fNU-Gc-Hsv"/>
                         <outlet property="liveButton" destination="57W-jF-l5P" id="eh8-3T-TNS"/>
                         <outlet property="liveCollectionView" destination="VNG-a4-2a4" id="cf0-B6-qd3"/>
                         <outlet property="scrollView" destination="77v-ba-uqi" id="hBP-X4-5ea"/>
                         <outlet property="segmentBar" destination="fUG-1s-NuQ" id="2vd-Ij-Y5H"/>
+                        <outlet property="segmentBarLeadingConstraint" destination="pDR-VK-COc" id="Qga-7G-S7P"/>
+                        <outlet property="videoBtnBackgroundView" destination="QOG-sb-jIZ" id="0Nx-tt-O9u"/>
                         <outlet property="videoButton" destination="eJW-CF-EY5" id="BhQ-r9-w5H"/>
                         <outlet property="videoCollectionView" destination="Ea9-w7-Rvy" id="GvL-Ip-dC9"/>
                     </connections>

@@ -27,10 +27,15 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     @IBOutlet var segmentBar: UIView!
     @IBOutlet var liveButton: UIButton!
     @IBOutlet var videoButton: UIButton!
+    @IBOutlet var liveBtnBackgroundView: UIView!
+    @IBOutlet var videoBtnBackgroundView: UIView!
     @IBOutlet var contentWidthConstraint: NSLayoutConstraint!
+    @IBOutlet var segmentBarLeadingConstraint: NSLayoutConstraint!
     
     var videoArray:[AnyObject] = []
     var liveArray:[AnyObject] = []
+    
+    var segmentBarConstraints = [NSLayoutConstraint]()
     
     var selectedSegmentIndex = -1 {
         didSet {
@@ -59,12 +64,53 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        contentWidthConstraint.constant = view.frame.width * 2
+        let value = UIInterfaceOrientation.Portrait.rawValue
+        UIDevice.currentDevice().setValue(value, forKey: "orientation")
+        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        contentWidthConstraint.constant = view.frame.width * 2
+        
+        NSLayoutConstraint.deactivateConstraints([segmentBarLeadingConstraint])
+        NSLayoutConstraint.deactivateConstraints(segmentBarConstraints)
+        segmentBarConstraints.removeAll()
+        
+        if selectedSegmentIndex == 0 {
+            segmentBarConstraints.append(NSLayoutConstraint(item: segmentBar, attribute: .CenterX, relatedBy: .Equal, toItem: liveBtnBackgroundView, attribute: .CenterX, multiplier: 1.0, constant: 0.0))
+            self.scrollView.contentOffset.x = 0
+        }
+        else {
+            segmentBarConstraints.append(NSLayoutConstraint(item: segmentBar, attribute: .CenterX, relatedBy: .Equal, toItem: videoBtnBackgroundView, attribute: .CenterX, multiplier: 1.0, constant: 0.0))
+            self.scrollView.contentOffset.x = self.view.frame.width
+        }
+        
+        NSLayoutConstraint.activateConstraints(segmentBarConstraints)
+    }
+    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        self.videoCollectionView.collectionViewLayout.invalidateLayout()
+        self.liveCollectionView.collectionViewLayout.invalidateLayout()
+        
+//        if selectedSegmentIndex == 0 {
+//            self.scrollView.contentOffset.x = 0
+//        }
+//        else {
+//            self.scrollView.contentOffset.x = size.width
+//        }
+        
     }
     
     func queryVideoData() {
@@ -161,7 +207,11 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
                 })
             }
             else {
-                
+                cell.playButton.addHandler({
+                    let alert = SLAlertController(title: "Something wrong may happen with this video", message: nil, image: nil, cancelButtonTitle: "OK", otherButtonTitle: nil, delay: nil, withAnimation: SLAlertAnimation.Fade)
+                    alert.alertTintColor = UIColor.RGB(255, 58, 47)
+                    alert.show(self, animated: true, completion: nil)
+                })
             }
             
             
@@ -226,19 +276,25 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        let offsetRatio = scrollView.contentOffset.x / self.view.frame.width
-        var frame = self.segmentBar.frame
-        frame.origin.x = self.view.frame.width / 4.0 - segmentBar.frame.width / 2.0 + offsetRatio * (self.view.frame.width / 2.0)
-        segmentBar.frame = frame
+        if scrollView == self.scrollView {
+            let offsetRatio = scrollView.contentOffset.x / self.view.frame.width
+            var frame = self.segmentBar.frame
+            frame.origin.x = self.view.frame.width / 4.0 - segmentBar.frame.width / 2.0 + offsetRatio * (self.view.frame.width / 2.0)
+            segmentBar.frame = frame
+        }
+        
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        if scrollView.contentOffset.x == 0 {
-            selectedSegmentIndex = 0
+        if scrollView == self.scrollView {
+            if self.scrollView.contentOffset.x == 0 {
+                selectedSegmentIndex = 0
+            }
+            else if self.scrollView.contentOffset.x == self.view.frame.width {
+                selectedSegmentIndex = 1
+            }
         }
-        else if scrollView.contentOffset.x == self.view.frame.width {
-            selectedSegmentIndex = 1
-        }
+        
     }
     
     // MARK: -

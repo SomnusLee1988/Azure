@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -40,6 +41,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    func application(application: UIApplication, supportedInterfaceOrientationsForWindow window: UIWindow?) -> UIInterfaceOrientationMask {
+        
+        let topViewController = self.topViewControllerWithRootViewController(window?.rootViewController)
+        
+        if topViewController is AVPlayerViewController {
+            
+            return .AllButUpsideDown
+        }
+        
+        return .Portrait
+    }
+    
+    private func topViewControllerWithRootViewController(rootViewController: UIViewController!) -> UIViewController? {
+        if (rootViewController == nil) { return nil }
+        if (rootViewController.isKindOfClass(UITabBarController)) {
+            return topViewControllerWithRootViewController((rootViewController as! UITabBarController).selectedViewController)
+        } else if (rootViewController.isKindOfClass(UINavigationController)) {
+            return topViewControllerWithRootViewController((rootViewController as! UINavigationController).visibleViewController)
+        } else if (rootViewController.presentedViewController != nil) {
+            return topViewControllerWithRootViewController(rootViewController.presentedViewController)
+        }
+        return rootViewController
     }
 
 

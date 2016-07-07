@@ -30,6 +30,13 @@ class AzureCollectionViewLayout: UICollectionViewLayout {
     
     override func prepareLayout() {
         if cache.isEmpty {
+            // 1
+            if UIScreen.mainScreen().bounds.width > UIScreen.mainScreen().bounds.height {
+                numberOfColumns = 3
+            }
+            else {
+                numberOfColumns = 2
+            }
             // 2
             let columnWidth = contentWidth / CGFloat(numberOfColumns)
             var xOffset = [CGFloat]()

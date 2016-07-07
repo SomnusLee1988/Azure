@@ -100,13 +100,15 @@ public class SLAlertController: UIViewController {
         self.alertView = UIView()
         self.view.addSubview(alertView)
         
+        assert(!title.isEmpty, "alert title can not be empty!")
+        
         self.tilteLabel = UILabel()
         tilteLabel.numberOfLines = 0
         tilteLabel.textAlignment = .Center
         tilteLabel.text = title
         self.alertView.addSubview(tilteLabel)
         
-        if message != nil {
+        if message != nil && !(message?.isEmpty)! {
             self.textView = UITextView()
             self.textView.editable = false
             self.textView.text = message
@@ -168,17 +170,17 @@ public class SLAlertController: UIViewController {
         
         y += padding
         
-        let titlestr = tilteLabel.text as! NSString
-        let titleRect = titlestr.boundingRectWithSize(CGSizeMake(contentWdith, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:tilteLabel.font], context: nil)
+        let titlestr = tilteLabel.text
+        let titleRect = titlestr!.boundingRectWithSize(CGSizeMake(contentWdith, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:tilteLabel.font], context: nil)
         self.tilteLabel.frame = CGRectMake(padding, y, contentWdith, ceil(titleRect.height))
         
         y += tilteLabel.frame.height
         y += padding
         
         if self.textView != nil {
-            let textstr = textView.text as! NSString
+            let textstr = textView.text
             let realsize = textView.sizeThatFits(CGSizeMake(contentWdith, CGFloat.max))
-            let textRect = textstr.boundingRectWithSize(CGSizeMake(contentWdith, realsize.height), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:textView.font!], context: nil)
+            let textRect = textstr!.boundingRectWithSize(CGSizeMake(contentWdith, realsize.height), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:textView.font!], context: nil)
             self.textView.frame = CGRectMake(padding, y, contentWdith, ceil(titleRect.height))
             y += tilteLabel.frame.height
             y += padding
@@ -209,6 +211,7 @@ public class SLAlertController: UIViewController {
     }
     
     public func show(viewController:UIViewController, animated:Bool, completion:(() -> Void)?) {
+        assert(NSThread.isMainThread(), "SLAlertController needs to be accessed on the main thread.")
         self.rootViewController = viewController
         
         self.view.alpha = 0
@@ -232,17 +235,31 @@ public class SLAlertController: UIViewController {
                 })
                 
             })
-            break
             
         case .Top:
-            break
+            self.rootViewController.presentViewController(self, animated: false, completion: { 
+                
+                UIView.animateWithDuration(0.2, animations: { 
+                    self.view.alpha = 1.0
+                })
+                
+                self.alertView.center.x = self.view.center.x
+                self.alertView.center.y = -500
+                
+                UIView.animateWithDuration(0.5, delay: 0.05, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: [], animations: {
+                    self.alertView.center = self.view.center
+                    }, completion: { finished in
+                        if let d = self.delay {
+                            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(d * Double(NSEC_PER_SEC)))
+                            dispatch_after(delayTime, dispatch_get_main_queue()) {
+                                self.hide(true)
+                            }
+                        }
+                })
+            })
             
         case .None:
             self.view.alpha = 1.0
-            break
-            
-        default:
-            break
             
         }
     }
@@ -257,6 +274,7 @@ public class SLAlertController: UIViewController {
     
     
     public func hide(animated:Bool) {
+        assert(NSThread.isMainThread(), "SLAlertController needs to be accessed on the main thread.")
         if animated {
             switch self.animationType! {
             case .Fade:
@@ -278,6 +296,24 @@ public class SLAlertController: UIViewController {
                 break
                 
             case .Top:
+                UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: [], animations: {
+                    self.alertView.center.y = self.view.center.y + self.view.frame.height
+                    }, completion: { finished in
+                        UIView.animateWithDuration(0.1, animations: {
+                            self.view.alpha = 0
+                            }, completion: { finished in
+                                self.dismissViewControllerAnimated(false, completion: {
+                                    
+                                    if self.cancelAction != nil {
+                                        self.cancelAction()
+                                    }
+                                    
+                                    if self.otherAction != nil {
+                                        self.otherAction()
+                                    }
+                                })
+                        })
+                })
                 break
                 
             case .None:
@@ -293,13 +329,27 @@ public class SLAlertController: UIViewController {
                 })
                 break
                 
-            default:
-                break
-                
             }
         }
     }
     
+    public func addCancelAction(action:()->Void) {
+        self.cancelAction = action
+    }
+    
+    public func addOtherAction(action: ()->Void) {
+        self.otherAction = action
+    }
+    
+    public func setTitleFont(font: UIFont) {
+        self.tilteLabel.font = font
+    }
+    
+    public func setTextFont(font: UIFont) {
+        if self.textView != nil {
+            self.textView.font = font
+        }
+    }
 
     /*
     // MARK: - Navigation
